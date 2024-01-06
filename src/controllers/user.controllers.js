@@ -19,6 +19,8 @@ export const getUser = async (req, res) => {
       id,
     ]);
 
+    pool.end();
+
     if (rows.length <= 0) {
       return res.status(404).json({ message: "Usuario no encontrado " });
     }
@@ -34,6 +36,7 @@ export const deleteUser = async (req, res) => {
     console.log(req);
     const { id } = req.params;
     const [rows] = await pool.query("DELETE FROM user WHERE iduser = ?", [id]);
+    pool.end();
 
     if (rows.affectedRows <= 0) {
       return res.status(404).json({ message: "Autor no encontrado" });
@@ -57,6 +60,7 @@ export const createUser = async (req, res) => {
     const [rowsuser] = await pool.query("SELECT * FROM user WHERE email = ?", [
       req.body.email,
     ]);
+    pool.end();
     if (rowsuser.length > 0) {
       return res.status(404).json({ message: "El correo ya esta en uso " });
     }
@@ -68,6 +72,8 @@ export const createUser = async (req, res) => {
       "INSERT INTO user (nombre, apellido, username, email, password) VALUES (?, ?, ?, ?, ?)",
       [nombre, apellido, username, email, hashedPassword]
     );
+
+    pool.end();
     res.status(201).json({ iduser: rows.insertId, nombre, apellido, username, email, hashedPassword });
   } catch (error) {
     return res.status(500).json({ message: "Algo va mal createUser: "+error.message });
@@ -85,6 +91,7 @@ export const loginUser = async (req, res) => {
     const [rows] = await pool.query("SELECT * FROM user WHERE email = ?", [
       req.body.email,
     ]);
+    pool.end();
     if (rows.length <= 0) {
       return res.status(404).json({ message: "no se encontro ningun usuario " });
     }
@@ -131,6 +138,7 @@ export const updateUser = async (req, res) => {
       "UPDATE user SET nombre= IFNULL(?, nombre), apellido= IFNULL(?, apellido), username= IFNULL(?, username), email= IFNULL(?, email), password= IFNULL(?, password)  WHERE iduser = ?",
       [nombre, apellido, username, email, hashedPassword, id]
     );
+    pool.end();
 
     if (result.affectedRows === 0)
       return res.status(404).json({ message: "Autor no encontrado" });
@@ -138,6 +146,7 @@ export const updateUser = async (req, res) => {
     const [rows] = await pool.query("SELECT * FROM user WHERE iduser = ?", [
       id,
     ]);
+    pool.end();
 
     res.json(rows[0]);
   } catch (error) {

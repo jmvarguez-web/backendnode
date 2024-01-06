@@ -3,6 +3,7 @@ import { pool } from "../db.js";
 export const getLibros = async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT * FROM libros");
+    pool.end();
     res.json(rows);
   } catch (error) {
     return res.status(500).json({ message: "Algo va mal" });
@@ -15,6 +16,7 @@ export const getLibro = async (req, res) => {
     const [rows] = await pool.query("SELECT * FROM libros WHERE idlibro = ?", [
       id,
     ]);
+    pool.end();
 
     if (rows.length <= 0) {
       return res.status(404).json({ message: "Libro no encontrado" });
@@ -31,6 +33,7 @@ export const getLibrosPalabra = async (req, res) => {
     const [rows] = await pool.query("SELECT * FROM libros WHERE titulo LIKE ? or editorial LIKE ?", [
       `%${palabra}%`, `%${palabra}%`
     ]);
+    pool.end();
 
     if (rows.length <= 0) {
       return res.status(404).json({ message: "Libro no encontrado en getLibrosPalabra" });
@@ -46,6 +49,7 @@ export const deleteLibro = async (req, res) => {
   try {
     const { id } = req.params;
     const [rows] = await pool.query("DELETE FROM libros WHERE idlibro = ?", [id]);
+    pool.end();
 
     if (rows.affectedRows <= 0) {
       return res.status(404).json({ message: "Libro no encontrado" });
@@ -80,6 +84,7 @@ export const createLibro = async (req, res) => {
         ,editorial
         ,edicion]
     );
+    pool.end();
     res.status(201).json({ id: rows.insertId,  isbn
       ,titulo
       ,autor_id
@@ -120,7 +125,7 @@ export const updateLibro = async (req, res) => {
         ,editorial
         ,edicion,id]
     );
-
+    pool.end();
     if (result.affectedRows === 0)
       return res.status(404).json({ message: "Libro no encontrado" });
 

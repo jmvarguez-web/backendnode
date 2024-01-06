@@ -16,6 +16,7 @@ export const createUser = async (req, res) => {
     const [rowsuser] = await pool.query("SELECT * FROM user WHERE email = ?", [
       req.body.email,
     ]);
+    pool.end();
     if (rowsuser.length > 0) {
       return res.status(404).json({ message: "El correo ya esta en uso " });
     }
@@ -27,6 +28,7 @@ export const createUser = async (req, res) => {
       "INSERT INTO user (nombre, apellido, username, email, password) VALUES (?, ?, ?, ?, ?)",
       [nombre, apellido, username, email, hashedPassword]
     );
+    pool.end();
     res.status(201).json({ iduser: rows.insertId, nombre, apellido, username, email, hashedPassword });
   } catch (error) {
     return res.status(500).json({ message: "Algo va mal createUser: "+error.message });
@@ -44,6 +46,7 @@ export const loginUser = async (req, res) => {
     const [rows] = await pool.query("SELECT * FROM user WHERE email = ?", [
       req.body.email,
     ]);
+    pool.end();
     if (rows.length <= 0) {
       return res.status(404).json({ message: "no se encontro ningun usuario " });
     }
