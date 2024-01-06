@@ -10,7 +10,7 @@ import cors  from 'cors';
 //import autoresRoutes from './routes/autores.routes.js'
 const app =express();
 const corsOptions = {
-    origin: ['http://localhost:3000','http://localhost:3010', 'https://react-jmvarguez.netlify.app'],
+    origin: ['http://localhost:3000','http://localhost:3010', 'https://react-jmvarguez.netlify.app','https://frontendnode-production.up.railway.app'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // Habilita el intercambio de cookies a través de dominios
   };
