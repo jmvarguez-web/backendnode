@@ -31,6 +31,7 @@ export const createUser = async (req, res) => {
     pool.end();
     res.status(201).json({ iduser: rows.insertId, nombre, apellido, username, email, hashedPassword });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: "Algo va mal createUser: "+error.message });
   }
 };
