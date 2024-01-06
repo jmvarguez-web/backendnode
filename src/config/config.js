@@ -13,7 +13,6 @@ import 'dotenv/config'
     dbPassword:process.env.DB_PASSWORD || 'user2023.MY2023',
     dbHost:process.env.DB_HOST || 'localhost',
     dbName:process.env.DB_NAME || 'libreria',
-    dbdockerPort:process.env.MYSQLDB_DOCKER_PORT || 3306,
     dbPort:process.env.DB_PORT || 3309,
     keyacces:process.env.KEYACCES}
 
